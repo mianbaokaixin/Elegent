@@ -1,0 +1,22 @@
+name: lint
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Install quality tools
+        run: pip install pre-commit mypy
+      - name: Run pre-commit
+        run: pre-commit run --all-files --show-diff-on-failure
+      - name: Run mypy
+        run: mypy metabci/ --ignore-missing-imports
